@@ -1,5 +1,7 @@
 package src;
 
+// GUARDA AS INFORMAÇÕES DE UM VOO
+
 public class EdgeVoos extends Edge {
   private long partida;     
   private long chegada;     

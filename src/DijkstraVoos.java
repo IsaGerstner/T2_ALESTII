@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+// ACHA A MELHOR ROTA
+
 public class DijkstraVoos {
 
     private Map<String, Double> distTo;
@@ -11,8 +13,8 @@ public class DijkstraVoos {
     private IndexMinHeap<String, Double> pq;
 
 public DijkstraVoos(GrafoVoos g, String s, long horarioInicial, Set<String> hubs) {
-    distTo = new HashMap<>();
-    edgeTo = new HashMap<>();
+    distTo = new HashMap<>(); // anota o horário mais cedo de chegada
+    edgeTo = new HashMap<>(); // truque pra reconstruir a rota no fim — partindo do destino, ela volta de voo em voo até a origem.
     pq = new IndexMinHeap<>();
 
     for (String v : g.getVerts())

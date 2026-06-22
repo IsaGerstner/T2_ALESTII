@@ -6,18 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// guarda a lista de todos os voos que partem dele; guarda o mapa de aeroportos e calcula os 5 hubs e fecha algum hub
 
 public class GrafoVoos {
   protected static final String NEWLINE = System.getProperty("line.separator");
 
-  protected Map<String, List<EdgeVoos>> graph;
+  protected Map<String, List<EdgeVoos>> graph; // lista de voos
   protected Set<String> vertices;
   protected int totalVertices;
   protected int totalEdges;
+  protected Map<String, Aeroporto> aeroportos; // mapa dos aeroportos
 
   public GrafoVoos() {
     graph = new HashMap<>();
     vertices = new HashSet<>();
+    aeroportos = new HashMap<>();
     totalVertices = totalEdges = 0;
   }
 
@@ -87,6 +90,45 @@ public class GrafoVoos {
     graph.put(v, list);
     return list;
   }
+
+public void addAeroporto(Aeroporto a) { 
+    aeroportos.put(a.getIcao(), a); 
+}
+
+public Aeroporto getAeroporto(String icao) { 
+    return aeroportos.get(icao); 
+}
+
+public Map<String, Aeroporto> getAeroportos() { 
+    return aeroportos; 
+}
+
+
+// REVISAR - calcula hubs (5 aeroportos com mais conexões)
+public List<String> calcularHubs(int n) {
+    Map<String, Integer> grau = new HashMap<>();
+    // percorre TODAS as arestas uma vez:
+    for (String v : vertices)
+        for (EdgeVoos e : getAdj(v)) {
+            grau.merge(e.getV(), 1, Integer::sum); // +1 no grau de SAÍDA da origem
+            grau.merge(e.getW(), 1, Integer::sum); // +1 no grau de ENTRADA do destino
+        }
+    // ordena por grau (maior primeiro), só nacionais, pega os n primeiros:
+    return grau.entrySet().stream()
+        .filter(en -> { Aeroporto a = getAeroporto(en.getKey()); return a != null && a.isNacional(); })
+        .sorted((a, b) -> b.getValue() - a.getValue())
+        .limit(n)
+        .map(Map.Entry::getKey)
+        .toList();
+}
+
+//REVISAR - fechar um hub
+public void removerAeroporto(String icao) {
+    vertices.remove(icao);
+    graph.remove(icao);                              // tira os voos que SAEM dele
+    for (List<EdgeVoos> lista : graph.values())
+        lista.removeIf(e -> e.getW().equals(icao));  // tira os voos que CHEGAM nele
+}
 
     
 }
