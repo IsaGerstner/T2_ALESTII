@@ -69,18 +69,6 @@ public class GrafoVoos {
     return ed;
   }
 
-  public String toDot() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("graph {" + NEWLINE);
-    sb.append("rankdir = LR;" + NEWLINE);
-    sb.append("node [shape = circle];" + NEWLINE);
-    for (EdgeVoos e : getEdges())
-      sb.append(
-          String.format("%s -> %s [label=\"%.2f / %.2f\" %s]", e.getV(), e.getW(), e.getCia(), e.getNumeroVoo(), e.getAeronave(), e.getChegada(), e.getPartida()) + NEWLINE);
-    sb.append("}" + NEWLINE);
-    return sb.toString();
-  }
-
   
   protected List<EdgeVoos> addToList(String v, EdgeVoos e) {
     List<EdgeVoos> list = graph.get(v);

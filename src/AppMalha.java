@@ -26,19 +26,16 @@ public class AppMalha {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        // (1) Carrega os dados dos arquivos
         GrafoVoos g = LeitorDados.carregar("dados");
         System.out.println("Dados carregados: " + g.getTotalVerts() + " aeroportos, "
                            + g.getTotalEdges() + " voos.");
 
-        // (2) Calcula e mostra os 5 hubs
         List<String> hubsLista = g.calcularHubs(5);
         Set<String> hubs = new HashSet<>(hubsLista);
         System.out.println("\n5 principais hubs do país:");
         for (String h : hubsLista)
             System.out.println("  " + h + " - " + nome(g, h));
 
-        // (3) Pergunta origem, destino, data/hora
         System.out.print("\nAeroporto de ORIGEM (ICAO): ");
         String origem = sc.nextLine().trim().toUpperCase();
         System.out.print("Aeroporto de DESTINO (ICAO): ");
@@ -46,7 +43,6 @@ public class AppMalha {
         System.out.print("Data e hora de partida (dd/MM/yyyy HH:mm): ");
         String dataStr = sc.nextLine().trim();
 
-        // valida os aeroportos e a data
         if (g.getAeroporto(origem) == null || g.getAeroporto(destino) == null) {
             System.out.println("ERRO: origem ou destino não existe na base.");
             return;
@@ -59,7 +55,6 @@ public class AppMalha {
             return;
         }
 
-        // (4) Pergunta se quer fechar um hub
         System.out.print("\nDeseja fechar um dos hubs? (s/n): ");
         if (sc.nextLine().trim().equalsIgnoreCase("s")) {
             System.out.print("Qual hub fechar " + hubsLista + "? ");
@@ -73,10 +68,9 @@ public class AppMalha {
             }
         }
 
-        // (5) Roda o algoritmo
         DijkstraVoos dij = new DijkstraVoos(g, origem, inicio, hubs);
 
-        // (6) Imprime a rota formatada
+        
         System.out.println("\n===================== ROTA =====================");
         System.out.println("De " + nome(g, origem) + " para " + nome(g, destino));
         System.out.println("Partida desejada: " + hora(inicio));
@@ -104,8 +98,10 @@ public class AppMalha {
         }
 
         System.out.println("------------------------------------------------");
-        long total = (long) (dij.distTo(destino) - inicio);
+        long tempoVoo = 0;
+        for (EdgeVoos e : rota)
+            tempoVoo += (e.getChegada() - e.getPartida());
         System.out.println("Chegada final: " + hora(dij.distTo(destino)));
-        System.out.println("Duração total da viagem: " + duracao(total));
+        System.out.println("Tempo total de voo: " + duracao(tempoVoo));
     }
 }

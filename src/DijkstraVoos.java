@@ -29,7 +29,7 @@ private void dijkstra(GrafoVoos g, String s, long horarioInicial, Set<String> hu
         String v = pq.delMin();
         for (EdgeVoos e : g.getAdj(v)) {
             double prontoEm = distTo.get(v) + deltaT(v, s, hubs); // deltaT responde "quantos minutos de espera neste aeroporto?"
-            if (e.getPartida() >= prontoEm)
+            if (e.getPartida() >= prontoEm) 
                 relax(e);
         }
     }
@@ -72,13 +72,9 @@ private int deltaT(String aeroporto, String origem, Set<String> hubs) {
     public Iterable<EdgeVoos> pathTo(String v) {
         LinkedList<EdgeVoos> path = new LinkedList<>();
         EdgeVoos e = edgeTo.get(v);
-        // Enquanto não chegar na primeira aresta...
+        // enquanto não chegar na primeira aresta;
         while(e != null) {
-            // Adiciona no início, pois o caminho é
-            // percorrido ao contrário (do fim para o início)
             path.addFirst(e);
-            // A próxima aresta é aquela que vem de V (início desta aresta)
-            // (lembrando: estamos percorrendo ao CONTRÁRIO)
             e = edgeTo.get(e.getV());
         }
         return path;
