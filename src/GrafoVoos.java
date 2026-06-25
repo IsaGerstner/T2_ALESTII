@@ -92,7 +92,7 @@ public Map<String, Aeroporto> getAeroportos() {
 }
 
 
-// REVISAR - calcula hubs (5 aeroportos com mais conexões)
+//calcula hubs (5 aeroportos com mais conexões)
 public List<String> calcularHubs(int n) {
     Map<String, Integer> grau = new HashMap<>();
     // percorre TODAS as arestas uma vez:
@@ -110,7 +110,7 @@ public List<String> calcularHubs(int n) {
         .toList();
 }
 
-//REVISAR - fechar um hub
+//fechar um hub
 public void removerAeroporto(String icao) {
     vertices.remove(icao);
     graph.remove(icao);                              // tira os voos que SAEM dele
